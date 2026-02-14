@@ -1,4 +1,4 @@
-export type PlanPeriod = "dinner" | "day" | "month";
+export type PlanPeriod = "meal" | "day" | "week" | "month";
 
 export type Allergy =
   | "nuts"
@@ -9,6 +9,8 @@ export type Allergy =
   | "soy";
 
 export type AgeGroup = "adult" | "teen" | "child";
+
+export type DietPref = "classic" | "healthy" | "vegetarian" | "budget";
 
 export interface FamilyMember {
   id: string;
@@ -22,7 +24,7 @@ export interface Product {
   name: string;
   unit: string;
   allergens: Allergy[];
-  category: "protein" | "garnish" | "vegetable" | "dairy" | "basic";
+  category: "protein" | "garnish" | "vegetable" | "dairy" | "basic" | "fruit";
   prices: Record<string, number>;
 }
 
@@ -37,6 +39,7 @@ export interface Meal {
   description: string;
   minutes: number;
   tags: string[];
+  kcalPerServing: number;
   products: MealProduct[];
   steps: string[];
 }
@@ -44,6 +47,7 @@ export interface Meal {
 export interface RetailStore {
   id: string;
   name: string;
+  logo: string;
   deliveryFee: number;
   checkoutUrl: string;
 }
@@ -52,6 +56,7 @@ export interface PlanRequest {
   period: PlanPeriod;
   budget: number;
   family: FamilyMember[];
+  dietPref?: DietPref;
 }
 
 export interface PlannedMeal {

@@ -22,6 +22,11 @@
   --orange-glow: rgba(245, 158, 11, 0.15);
   --danger: #ef4444;
   --danger-glow: rgba(239, 68, 68, 0.12);
+  --text-secondary: #6b7a99;
+  --card-bg: rgba(17, 24, 39, 0.65);
+  --card-active-bg: rgba(99, 102, 241, 0.18);
+  --accent-muted: rgba(99, 102, 241, 0.45);
+  --divider: rgba(255, 255, 255, 0.08);
   --gradient-main: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
   --gradient-green: linear-gradient(135deg, #22c55e, #06b6d4);
   --gradient-warm: linear-gradient(135deg, #f59e0b, #ef4444);
@@ -973,7 +978,7 @@ a:active { opacity: 0.7; }
   -webkit-backdrop-filter: blur(20px);
   border-top: 1px solid var(--line);
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   padding: 6px 8px calc(env(safe-area-inset-bottom, 6px) + 6px);
   z-index: 100;
 }

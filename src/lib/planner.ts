@@ -2,6 +2,7 @@ import { MEALS, PRODUCTS, STORES } from "@/data/catalog";
 import type {
   Allergy,
   CartItem,
+  DietPref,
   Meal,
   PlanPeriod,
   PlanRequest,
@@ -11,8 +12,9 @@ import type {
 } from "@/types";
 
 const PERIOD_MULTIPLIER: Record<PlanPeriod, number> = {
-  dinner: 1,
+  meal: 1,
   day: 3,
+  week: 21,
   month: 90,
 };
 
@@ -22,10 +24,17 @@ const AGE_FACTOR = {
   child: 0.65,
 } as const;
 
+const DIET_TAGS: Record<DietPref, string[]> = {
+  classic: [],
+  healthy: ["белок"],
+  vegetarian: ["вегетарианское"],
+  budget: ["бюджет"],
+};
+
 function getProduct(productId: string) {
   const product = PRODUCTS.find((item) => item.id === productId);
   if (!product) {
-    throw new Error(`Product ${productId} not found`);
+    throw new Error(`Продукт ${productId} не найден`);
   }
   return product;
 }
@@ -50,6 +59,12 @@ function mealCostPerServing(meal: Meal) {
     const cheapest = cheapestStore(entry.productId);
     return sum + cheapest.price * entry.unitsPerServing;
   }, 0);
+}
+
+function mealMatchesDiet(meal: Meal, dietPref: DietPref) {
+  const requiredTags = DIET_TAGS[dietPref];
+  if (!requiredTags.length) return true;
+  return requiredTags.some((tag) => meal.tags.includes(tag));
 }
 
 function buildCart(meals: PlannedMeal[], familyWeight: number) {
@@ -137,10 +152,18 @@ export function buildNutritionPlan(input: PlanRequest): PlanResponse {
   );
 
   const targetMeals = PERIOD_MULTIPLIER[input.period];
-  const safeMeals = MEALS.filter((meal) => !mealContainsAllergen(meal, blockedAllergens));
+  const dietPref = input.dietPref ?? "classic";
+
+  let safeMeals = MEALS.filter((meal) => !mealContainsAllergen(meal, blockedAllergens));
+
+  // Prefer meals matching diet preference, but fallback to all safe meals
+  const dietMeals = safeMeals.filter((m) => mealMatchesDiet(m, dietPref));
+  if (dietMeals.length >= 3) {
+    safeMeals = dietMeals;
+  }
 
   if (!safeMeals.length) {
-    throw new Error("Не найдено блюд с учетом выбранных аллергий.");
+    throw new Error("Не найдено блюд с учётом выбранных аллергий и предпочтений.");
   }
 
   const sorted = [...safeMeals].sort((a, b) => mealCostPerServing(a) - mealCostPerServing(b));
@@ -191,13 +214,15 @@ export function buildNutritionPlan(input: PlanRequest): PlanResponse {
   const notes: string[] = [];
   if (plannedCount < targetMeals) {
     notes.push(
-      `Бюджета может не хватать для полного режима "${input.period}". Запланировано ${plannedCount} из ${targetMeals} приемов пищи.`,
+      `Бюджета хватает на ${plannedCount} из ${targetMeals} приёмов пищи. Увеличьте бюджет для полного плана.`,
     );
   }
 
-  notes.push(
-    `Учтенные аллергены: ${blockedAllergens.size ? [...blockedAllergens].join(", ") : "нет"}.`,
-  );
+  if (blockedAllergens.size) {
+    notes.push(
+      `Исключены аллергены: ${[...blockedAllergens].join(", ")}.`,
+    );
+  }
 
   return {
     familySize: input.family.length,
