@@ -7,6 +7,17 @@ create table if not exists public.families (
   created_at timestamptz not null default now()
 );
 
+create table if not exists public.telegram_users (
+  telegram_id bigint primary key,
+  username text,
+  first_name text not null,
+  last_name text,
+  language_code text,
+  photo_url text,
+  created_at timestamptz not null default now(),
+  last_login_at timestamptz not null default now()
+);
+
 create table if not exists public.family_members (
   id uuid primary key default gen_random_uuid(),
   family_id uuid not null references public.families(id) on delete cascade,
@@ -34,12 +45,17 @@ create table if not exists public.orders (
 );
 
 alter table public.families enable row level security;
+alter table public.telegram_users enable row level security;
 alter table public.family_members enable row level security;
 alter table public.nutrition_plans enable row level security;
 alter table public.orders enable row level security;
 
 create policy "allow anon read families" on public.families for select using (true);
 create policy "allow anon write families" on public.families for insert with check (true);
+
+create policy "allow anon read telegram users" on public.telegram_users for select using (true);
+create policy "allow anon write telegram users" on public.telegram_users for insert with check (true);
+create policy "allow anon update telegram users" on public.telegram_users for update using (true) with check (true);
 
 create policy "allow anon read members" on public.family_members for select using (true);
 create policy "allow anon write members" on public.family_members for insert with check (true);

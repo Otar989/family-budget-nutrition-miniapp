@@ -10,7 +10,7 @@ export async function POST(request: Request) {
   try {
     const body = (await request.json()) as OrderBody;
     if (!body.cart?.length) {
-      return NextResponse.json({ error: "Cart is empty." }, { status: 400 });
+      return NextResponse.json({ error: "Корзина пуста." }, { status: 400 });
     }
 
     const storeIds = [...new Set(body.cart.map((item) => item.selectedStoreId))];
@@ -29,9 +29,9 @@ export async function POST(request: Request) {
       status: "created",
       orderLinks,
       message:
-        "Order draft created. In production, this endpoint should call retail APIs for real checkout sessions.",
+        "Черновик заказа создан. Для полноценного заказа подключите API ритейлеров с реальными корзинами и оплатой.",
     });
   } catch {
-    return NextResponse.json({ error: "Failed to create order." }, { status: 500 });
+    return NextResponse.json({ error: "Не удалось создать заказ." }, { status: 500 });
   }
 }

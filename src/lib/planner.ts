@@ -120,11 +120,11 @@ function summarizeStores(cart: CartItem[]): StoreSummary[] {
 
 export function buildNutritionPlan(input: PlanRequest): PlanResponse {
   if (!input.family.length) {
-    throw new Error("Add at least one family member.");
+    throw new Error("Добавьте хотя бы одного члена семьи.");
   }
 
   if (input.budget <= 0) {
-    throw new Error("Budget must be greater than 0.");
+    throw new Error("Бюджет должен быть больше 0.");
   }
 
   const blockedAllergens = new Set<Allergy>(
@@ -140,7 +140,7 @@ export function buildNutritionPlan(input: PlanRequest): PlanResponse {
   const safeMeals = MEALS.filter((meal) => !mealContainsAllergen(meal, blockedAllergens));
 
   if (!safeMeals.length) {
-    throw new Error("No meals available with current allergy restrictions.");
+    throw new Error("Не найдено блюд с учетом выбранных аллергий.");
   }
 
   const sorted = [...safeMeals].sort((a, b) => mealCostPerServing(a) - mealCostPerServing(b));
@@ -191,12 +191,12 @@ export function buildNutritionPlan(input: PlanRequest): PlanResponse {
   const notes: string[] = [];
   if (plannedCount < targetMeals) {
     notes.push(
-      `Budget may be too tight for a full ${input.period} plan. Planned ${plannedCount} of ${targetMeals} meals.`,
+      `Бюджета может не хватать для полного режима "${input.period}". Запланировано ${plannedCount} из ${targetMeals} приемов пищи.`,
     );
   }
 
   notes.push(
-    `Allergens considered: ${blockedAllergens.size ? [...blockedAllergens].join(", ") : "none"}.`,
+    `Учтенные аллергены: ${blockedAllergens.size ? [...blockedAllergens].join(", ") : "нет"}.`,
   );
 
   return {

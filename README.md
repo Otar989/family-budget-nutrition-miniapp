@@ -7,12 +7,13 @@ A production-ready MVP of a Telegram Mini App that helps families build nutritio
 - Budget-driven nutrition planning (`dinner`, `day`, `month`)
 - Family profile with unlimited members
 - Allergies per member
+- Telegram account authorization with initData signature validation
 - Meal recommendations with recipes and prep time
 - Product basket split by stores with price estimation
 - Order draft endpoint for retail checkout handoff
-- Telegram WebApp initialization (`ready`, `expand`)
+- Telegram WebApp initialization (`ready`, `expand`) + RU UI
 - Supabase schema included
-- Adaptive mobile-first UI
+- Adaptive mobile-first UI with tab bar and light/dark liquid-glass design
 
 ## Tech Stack
 
@@ -37,6 +38,9 @@ Copy `.env.example` to `.env.local` and fill:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=...
 NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+SUPABASE_SERVICE_ROLE_KEY=...
+TELEGRAM_BOT_TOKEN=...
+TELEGRAM_SESSION_SECRET=...
 ```
 
 ## Supabase setup

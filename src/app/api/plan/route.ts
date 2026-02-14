@@ -9,7 +9,7 @@ export async function POST(request: Request) {
     return NextResponse.json(plan);
   } catch (error) {
     const message =
-      error instanceof Error ? error.message : "Could not build nutrition plan.";
+      error instanceof Error ? error.message : "Не удалось сформировать рацион.";
 
     return NextResponse.json({ error: message }, { status: 400 });
   }

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Manrope, Space_Grotesk } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -13,8 +14,8 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Budget Nutrition Planner Mini App",
-  description: "Telegram mini app for family nutrition plans under budget",
+  title: "План питания по бюджету",
+  description: "Telegram Mini App для подбора рациона семьи под бюджет",
 };
 
 export default function RootLayout({
@@ -23,7 +24,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ru">
+      <head>
+        <Script src="https://telegram.org/js/telegram-web-app.js" strategy="beforeInteractive" />
+      </head>
       <body className={`${manrope.variable} ${spaceGrotesk.variable}`}>{children}</body>
     </html>
   );
