@@ -40,7 +40,7 @@ export async function POST(request: Request) {
     response.cookies.set(sessionCookieName(), createSessionValue(user), {
       httpOnly: true,
       secure: true,
-      sameSite: "lax",
+      sameSite: "none",
       path: "/",
       maxAge: sessionMaxAge(),
     });

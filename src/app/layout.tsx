@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Manrope, Space_Grotesk } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
@@ -14,8 +14,17 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "План питания по бюджету",
-  description: "Telegram Mini App для подбора рациона семьи под бюджет",
+  title: "Plan & Eat — Умный план питания",
+  description: "Подберем рацион под бюджет семьи, учтем аллергии и покажем где купить дешевле",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+  themeColor: "#0b0f1a",
 };
 
 export default function RootLayout({
